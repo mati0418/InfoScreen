@@ -10,7 +10,7 @@
 </head>
 
 <body class="bg-slate-900 text-white font-sans h-screen overflow-hidden">
-    <div class="p-10">
+    <div class="p-16">
 
         <!-- Aktuelles Wetter -->
         <div id="current"></div>
@@ -109,13 +109,17 @@
 
             // Aktuelles Wetter
             document.getElementById('current').innerHTML = `
-                <div class="flex items-center gap-6 mb-6">
+                <div class="flex w-full items-center gap-6 mb-6">
+		    <div class="text-6xl w-fit text-center">
+		    	Aktuelles Wetter:
+		    </div>
                     <i class="wi ${getWeatherIcon(data.current.code)} text-6xl ${getIconColor(data.current.code)}"></i>
                     <div class="text-6xl">
                         ${data.current.temp}°C
                     </div>
+		    <div id="current-time" class="text-6xl w-fit text-center justify-self-end"></div>
                 </div>
-                <div class="text-2xl opacity-80">
+                <div class="text-4xl opacity-80">
                     ${data.current.desc}
                 </div>
             `;
@@ -159,11 +163,20 @@
             });
 
             document.getElementById('forecast').innerHTML = forecastHtml;
-            feather.replace();
+     
         }
+	function updateTime() {
+		const now = new Date();
+		const hours = now.getHours().toString().padStart(2,"0");
+		const minutes = now.getMinutes().toString().padStart(2,"0");
+		document.getElementById('current-time').textContent = `${hours}:${minutes}`;
+	}
 
         loadWeather();
         setInterval(loadWeather, 300000); // alle 5 Minuten
+	updateTime();
+	setInterval(updateTime(), 60000);
+	setInterval(() => {location.reload();}, 10000);
     </script>
 </body>
 </html>
