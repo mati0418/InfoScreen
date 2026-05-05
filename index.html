@@ -28,8 +28,8 @@
             return days[d.getDay()];
         }
 
-        function getWeatherIcon(code, sunrise, sunset) {
-            const isNightTime = Number(hour.time) < Number(sunrise) || Number(hour.time) > Number(sunset);
+        function getWeatherIcon(code, time = "1200", sunrise = "600", sunset = "1800") {
+            const isNightTime = Number(time) < Number(sunrise) || Number(time) > Number(sunset);
 
             const dayNight = isNightTime ? "night" : "day";
 
@@ -107,7 +107,13 @@
             document.getElementById('current').innerHTML = `
                 <div class="flex w-full items-center gap-6 mb-6">
 		            <div class="text-6xl w-fit text-center">Aktuelles Wetter:</div>
-                    <i class="wi ${getWeatherIcon(data.current.code)} text-8xl ${getIconColor(data.current.code)}"></i>
+                    <i class="wi ${getWeatherIcon(data.current.code,
+                        (() => {
+                            const jetzt = new Date();
+                            return `${jetzt.getHours()}${jetzt.getMinutes()}`;
+                        })(),
+                        data.forecast[0].sunrise,
+                        data.forecast[0].sunset)} text-8xl ${getIconColor(data.current.code)}"></i>
                     <div class="text-6xl">
 			${data.current.temp}°C
                     </div>
@@ -126,7 +132,7 @@
                             <div class="font-bold text-2xl mb-1 w-1/6 text-right">
                                 ${hour.time.slice(0, -2)}:00
                             </div>
-                            <i class="wi ${getWeatherIcon(hour.code, day.sunrise, day.sunset)} text-4xl ${getIconColor(hour.code)} w-1/6"></i>
+                            <i class="wi ${getWeatherIcon(hour.code, hour.time, day.sunrise, day.sunset)} text-4xl ${getIconColor(hour.code)} w-1/6"></i>
                             <div class="text-2xl mt-1 opacity-80 w-3/6">
                                 ${hour.desc}
                             </div>
@@ -170,7 +176,7 @@
         updateTime();
         setInterval(updateTime, 60000);  // jede Minute
 
-	    setInterval(() => {location.reload();}, 20000);
+	    //setInterval(() => {location.reload();}, 20000);
     </script>
 </body>
 </html>

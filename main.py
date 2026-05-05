@@ -38,7 +38,7 @@ def get_weather():
     data = response.json()
 
     current = data["current_condition"][0]
-    #print(json.dumps(data, indent=2))
+    print(json.dumps(current, indent=2))
     #print("Current Weather:", current["weatherDesc"][0]["value"])
     #print("Morgen:")
     day = data["weather"][1]  # mittags
