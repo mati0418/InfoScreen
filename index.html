@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/weather-icons/2.0.12/css/weather-icons.min.css">
 </head>
 
-<body class="bg-slate-900 text-white font-sans h-screen overflow-hidden">
+<body class="bg-slate-900 text-white font-sans h-screen ">
     <div class="p-16 grid grid-cols-2 gap-8 w-full">
 
         <!-- Aktuelles Wetter -->
@@ -34,51 +34,54 @@
             const dayNight = isNightTime ? "night" : "day";
 
             const map = {
-                // Klar / Sonne
-                113: `wi-${dayNight}-sunny`,
-
-                // Teilweise bewölkt
+                113: isNightTime ? "wi-night-clear" : "wi-day-sunny",
                 116: `wi-${dayNight}-cloudy`,
-
-                // Bewölkt
                 119: "wi-cloudy",
                 122: "wi-cloudy",
-
-                // Nebel / Dunst
                 143: "wi-fog",
+                176: `wi-${dayNight}-showers`,
+                179: `wi-${dayNight}-sleet`,
+                182: `wi-${dayNight}-sleet`,
+                185: `wi-${dayNight}-sleet`,
+                200: `wi-${dayNight}-lightning`,
+                227: `wi-${dayNight}-snow`,
+                230: "wi-snow",
                 248: "wi-fog",
                 260: "wi-fog",
-
-                // leichter Regen
-                176: "wi-showers",
-                263: "wi-showers",
-                266: "wi-showers",
-
-                // Regen
-                293: "wi-rain",
-                296: "wi-rain",
-                299: "wi-rain",
-                302: "wi-rain",
-                305: "wi-rain",
-                308: "wi-rain",
-
-                // Schnee
-                323: "wi-snow",
-                326: "wi-snow",
+                263: `wi-${dayNight}-showers`,
+                266: `wi-${dayNight}-rain`,
+                281: `wi-${dayNight}-sleet`,
+                284: `wi-${dayNight}-sleet`,
+                293: `wi-${dayNight}-rain`,
+                296: `wi-${dayNight}-rain`,
+                299: `wi-${dayNight}-storm-showers`,
+                302: `wi-${dayNight}-rain-wind`,
+                305: `wi-${dayNight}-storm-showers`,
+                308: `wi-${dayNight}-rain-wind`,
+                311: `wi-${dayNight}-sleet`,
+                314: `wi-${dayNight}-sleet`,
+                317: `wi-${dayNight}-sleet`,
+                320: `wi-${dayNight}-snow`,
+                323: `wi-${dayNight}-snow`,
+                326: `wi-${dayNight}-snow`,
                 329: "wi-snow",
                 332: "wi-snow",
-                335: "wi-snow",
+                335: `wi-${dayNight}-snow`,
                 338: "wi-snow",
-
-                // Schneeregen
-                179: "wi-sleet",
-                362: "wi-sleet",
-                365: "wi-sleet",
-
-                // Gewitter
-                200: "wi-thunderstorm",
-                386: "wi-thunderstorm",
-                389: "wi-thunderstorm",
+                350: `wi-${dayNight}-sleet`,
+                353: `wi-${dayNight}-showers`,
+                356: `wi-${dayNight}-storm-showers`,
+                359: `wi-${dayNight}-rain-wind`,
+                362: `wi-${dayNight}-sleet`,
+                365: `wi-${dayNight}-sleet`,
+                368: `wi-${dayNight}-snow`,
+                371: `wi-${dayNight}-snow`,
+                374: `wi-${dayNight}-sleet`,
+                377: `wi-${dayNight}-sleet`,
+                386: `wi-${dayNight}-lightning`,
+                389: `wi-${dayNight}-lightning`,
+                392: `wi-${dayNight}-lightning`,
+                395: `wi-${dayNight}-snow`,
 
                 // Default
                 default: "wi-cloud"
@@ -88,13 +91,14 @@
         }
 
         function getIconColor(code) {
-            if (code === 113) return "text-yellow-400"; // Sonne
+            if (typeof code === "string") code = parseInt(code);
+            if ([113].includes(code)) return "text-yellow-400"; // Sonne
             if ([116].includes(code)) return "text-gray-300"; // partly
             if ([119,122].includes(code)) return "text-gray-400"; // cloudy
             if ([143,248,260].includes(code)) return "text-gray-500"; // fog
-            if (code >= 176 && code <= 308) return "text-blue-400"; // rain
-            if (code >= 323 && code <= 338) return "text-white"; // snow
-            if ([200,386,389].includes(code)) return "text-purple-400"; // thunder
+            if ([176,179,182,185,227,263,266,281,284,293,296,311,314,317,320,323,326,350,353,362,365,368,374,377,299,302,305,308,356,359].includes(code)) return "text-blue-400"; // rain
+            if ([230,329,332,335,338,371,395].includes(code)) return "text-white"; // snow
+            if ([200,386,389,392].includes(code)) return "text-orange-400"; // thunder
 
             return "text-gray-300";
         }
@@ -143,18 +147,18 @@
                     `;
                 });
                 forecastHtml += `
-                    <div class="bg-slate-800 grid grid-cols-2 p-6 rounded-2xl w-1/3 text-center shadow-lg">
-                        <div class="font-bold mb-2 text-4xl col-span-2">
+                    <div class="bg-slate-800 grid grid-cols-2 p-6 rounded-2xl w-1/3 content-start shadow-lg">
+                        <div class="font-bold mb-2 text-4xl col-span-2 h-12">
                             ${formatDate(day.date)}
                         </div>
-                        <i class="wi ${getWeatherIcon(day.code)} text-8xl row-span-2 ${getIconColor(day.code)}"></i>
-                        <div class="text-2xl mt-1 opacity-80">
+                        <i class="wi ${getWeatherIcon(day.code)} text-8xl h-32 row-span-2 ${getIconColor(day.code)}"></i>
+                        <div class="text-2xl opacity-80 h-16">
                             ${day.desc}
                         </div>
-                        <div class="text-2xl mt-2">
+                        <div class="text-2xl h-16">
                             ${day.max}° / ${day.min}°
                         </div>
-                        <div class="flex-col gap-4 mt-4 justify-center col-span-full">
+                        <div class="flex-col gap-4 justify-center col-span-full">
                             ${hourlyHtml}
                         </div>
                     </div>
