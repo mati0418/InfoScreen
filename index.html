@@ -10,13 +10,14 @@
 </head>
 
 <body class="bg-slate-900 text-white font-sans h-screen overflow-hidden">
-    <div class="p-16">
+    <div class="p-16 grid grid-cols-2 gap-8 w-full">
 
         <!-- Aktuelles Wetter -->
         <div id="current"></div>
+        <div id="current-time" class="text-6xl opacity-70 mt-2 self-center text-end"></div>
 
         <!-- Forecast -->
-        <div id="forecast" class="flex gap-6 mt-10"></div>
+        <div id="forecast" class="flex gap-6 mt-10 col-span-full"></div>
 
     </div>
 
@@ -27,13 +28,8 @@
             return days[d.getDay()];
         }
 
-        function isNight() {
-            const hour = new Date().getHours();
-            return hour < 6 || hour > 20;
-        }
-
-        function getWeatherIcon(code) {
-            const isNightTime = isNight();
+        function getWeatherIcon(hour, sunrise, sunset) {
+            const isNightTime = Number(hour.time) < Number(sunrise) || Number(hour.time) > Number(sunset);
 
             const dayNight = isNightTime ? "night" : "day";
 
@@ -88,7 +84,7 @@
                 default: "wi-cloud"
             };
 
-            return map[code] || map.default;
+            return map[hour.code] || map.default;
         }
 
         function getIconColor(code) {
@@ -110,14 +106,11 @@
             // Aktuelles Wetter
             document.getElementById('current').innerHTML = `
                 <div class="flex w-full items-center gap-6 mb-6">
-		    <div class="text-6xl w-fit text-center">
-		    	Aktuelles Wetter:
-		    </div>
+		            <div class="text-6xl w-fit text-center">Aktuelles Wetter:</div>
                     <i class="wi ${getWeatherIcon(data.current.code)} text-6xl ${getIconColor(data.current.code)}"></i>
                     <div class="text-6xl">
                         ${data.current.temp}°C
                     </div>
-		    <div id="current-time" class="text-6xl w-fit text-center justify-self-end"></div>
                 </div>
                 <div class="text-4xl opacity-80">
                     ${data.current.desc}
@@ -133,7 +126,7 @@
                             <div class="font-bold mb-1 w-1/6 text-right">
                                 ${hour.time.slice(0, -2)}:00
                             </div>
-                            <i class="wi ${getWeatherIcon(hour.code)} text-2xl ${getIconColor(hour.code)} w-1/6"></i>
+                            <i class="wi ${getWeatherIcon(hour, day.sunrise, day.sunset)} text-2xl ${getIconColor(hour.code)} w-1/6"></i>
                             <div class="text-sm mt-1 opacity-80 w-3/6">
                                 ${hour.desc}
                             </div>
@@ -145,10 +138,10 @@
                 });
                 forecastHtml += `
                     <div class="bg-slate-800 p-6 rounded-2xl w-1/3 text-center shadow-lg">
-                        <div class="font-bold mb-2 text-lg">
+                        <div class="font-bold mb-2 text-2xl">
                             ${formatDate(day.date)}
                         </div>
-                        <i class="wi ${getWeatherIcon(day.code)} text-3xl ${getIconColor(day.code)}"></i>
+                        <i class="wi ${getWeatherIcon(day.code)} text-4xl ${getIconColor(day.code)}"></i>
                         <div class="text-sm mt-1 opacity-80">
                             ${day.desc}
                         </div>
@@ -165,18 +158,19 @@
             document.getElementById('forecast').innerHTML = forecastHtml;
      
         }
-	function updateTime() {
-		const now = new Date();
-		const hours = now.getHours().toString().padStart(2,"0");
-		const minutes = now.getMinutes().toString().padStart(2,"0");
-		document.getElementById('current-time').textContent = `${hours}:${minutes}`;
-	}
+	    function updateTime() {
+    		const now = new Date();
+		    const hours = now.getHours().toString().padStart(2,"0");
+		    const minutes = now.getMinutes().toString().padStart(2,"0");
+		    document.getElementById('current-time').innerHTML = `${hours}:${minutes}`;
+	    }
 
         loadWeather();
         setInterval(loadWeather, 300000); // alle 5 Minuten
-	updateTime();
-	setInterval(updateTime(), 60000);
-	setInterval(() => {location.reload();}, 10000);
+        updateTime();
+        setInterval(updateTime, 60000);  // jede Minute
+
+	    setInterval(() => {location.reload();}, 20000);
     </script>
 </body>
 </html>

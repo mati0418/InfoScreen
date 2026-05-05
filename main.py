@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.responses import FileResponse
 import requests
+from datetime import datetime
 import json
 
 app = FastAPI()
@@ -10,11 +11,15 @@ def serve_index():
     return FileResponse("index.html")
 
 def get_weather_score(code: str) -> int:
-    if int(code) in [200, 386, 389]:  # Gewitter
+    if int(code)  in [200, 386, 389, 392]:    # Gewitter
+        return 7
+    if int(code) in [299, 302, 305, 308, 356, 359]:  # Regen
         return 6
-    if 176 <= int(code) <= 308:       # Regen
+    if int(code) in [230, 329, 332, 335, 338, 371, 395]:       # Schnee
         return 5
-    if 323 <= int(code) <= 338:       # Schnee
+    if int(code) in [176, 179, 182, 185, 227, 263, 266, 281, 
+                     284, 293, 296, 311, 314, 317, 320, 323, 
+                     326, 350, 353, 362, 365, 368, 374, 377]:       # leichter Regen oder leichter Schnee
         return 4
     if int(code) in [143, 248, 260]:  # Nebel
         return 3
@@ -47,6 +52,7 @@ def get_weather():
         #print(hour["weatherCode"], type(hour["weatherCode"]))
         #print()
         pass
+    
 
     forecast = []
     for day in data["weather"]:
@@ -72,6 +78,8 @@ def get_weather():
         dominant_code = max(scores, key=lambda k: scores[k])
         dominant_desc = next(hour["desc"] for hour in hourly if hour["code"] == dominant_code)
 
+        sunrise = datetime.strptime(day["astronomy"][0]["sunrise"], "%I:%M %p").strftime("%H%M").lstrip("0")
+        sunset = datetime.strptime(day["astronomy"][0]["sunset"], "%I:%M %p").strftime("%H%M").lstrip("0")
 
         forecast.append({
             "date": day["date"],
@@ -79,7 +87,9 @@ def get_weather():
             "min": day["mintempC"],
             "desc": dominant_desc,
             "code": dominant_code,
-            "hourly": hourly
+            "hourly": hourly,
+            "sunrise": sunrise,
+            "sunset": sunset
         })
 
     return {
