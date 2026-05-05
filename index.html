@@ -28,7 +28,7 @@
             return days[d.getDay()];
         }
 
-        function getWeatherIcon(hour, sunrise, sunset) {
+        function getWeatherIcon(code, sunrise, sunset) {
             const isNightTime = Number(hour.time) < Number(sunrise) || Number(hour.time) > Number(sunset);
 
             const dayNight = isNightTime ? "night" : "day";
@@ -84,7 +84,7 @@
                 default: "wi-cloud"
             };
 
-            return map[hour.code] || map.default;
+            return map[code] || map.default;
         }
 
         function getIconColor(code) {
@@ -107,9 +107,9 @@
             document.getElementById('current').innerHTML = `
                 <div class="flex w-full items-center gap-6 mb-6">
 		            <div class="text-6xl w-fit text-center">Aktuelles Wetter:</div>
-                    <i class="wi ${getWeatherIcon(data.current.code)} text-6xl ${getIconColor(data.current.code)}"></i>
+                    <i class="wi ${getWeatherIcon(data.current.code)} text-8xl ${getIconColor(data.current.code)}"></i>
                     <div class="text-6xl">
-                        ${data.current.temp}°C
+			${data.current.temp}°C
                     </div>
                 </div>
                 <div class="text-4xl opacity-80">
@@ -123,32 +123,32 @@
                 day.hourly.forEach(hour => {
                     hourlyHtml += `
                         <div class="flex gap-8 bg-slate-700 p-4 rounded-lg w-full items-center shadow">
-                            <div class="font-bold mb-1 w-1/6 text-right">
+                            <div class="font-bold text-2xl mb-1 w-1/6 text-right">
                                 ${hour.time.slice(0, -2)}:00
                             </div>
-                            <i class="wi ${getWeatherIcon(hour, day.sunrise, day.sunset)} text-2xl ${getIconColor(hour.code)} w-1/6"></i>
-                            <div class="text-sm mt-1 opacity-80 w-3/6">
+                            <i class="wi ${getWeatherIcon(hour.code, day.sunrise, day.sunset)} text-4xl ${getIconColor(hour.code)} w-1/6"></i>
+                            <div class="text-2xl mt-1 opacity-80 w-3/6">
                                 ${hour.desc}
                             </div>
-                            <div class="text-lg text-center mt-1 w-1/6">
+                            <div class="text-2xl text-center mt-1 w-1/6">
                                 ${hour.temp}°
                             </div>
                         </div>
                     `;
                 });
                 forecastHtml += `
-                    <div class="bg-slate-800 p-6 rounded-2xl w-1/3 text-center shadow-lg">
-                        <div class="font-bold mb-2 text-2xl">
+                    <div class="bg-slate-800 grid grid-cols-2 p-6 rounded-2xl w-1/3 text-center shadow-lg">
+                        <div class="font-bold mb-2 text-4xl col-span-2">
                             ${formatDate(day.date)}
                         </div>
-                        <i class="wi ${getWeatherIcon(day.code)} text-4xl ${getIconColor(day.code)}"></i>
-                        <div class="text-sm mt-1 opacity-80">
+                        <i class="wi ${getWeatherIcon(day.code)} text-8xl row-span-2 ${getIconColor(day.code)}"></i>
+                        <div class="text-2xl mt-1 opacity-80">
                             ${day.desc}
                         </div>
-                        <div class="text-lg mt-2">
+                        <div class="text-2xl mt-2">
                             ${day.max}° / ${day.min}°
                         </div>
-                        <div class="flex-col gap-4 mt-4 justify-center">
+                        <div class="flex-col gap-4 mt-4 justify-center col-span-full">
                             ${hourlyHtml}
                         </div>
                     </div>
