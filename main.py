@@ -31,13 +31,13 @@ def get_weather_score(code: str) -> int:
         return 0
     return 0
 
-def customWeatherCodes(code, time, sunrise, sunset, temp, windspeed):
+def customWeatherCodes(code, time, sunrise, sunset, moonrise, moonset, temp, windspeed):
     if code == "113":
-        if (int(time) - 15 <= int(sunrise) <= int(time) + 15):
+        if (int(time) - 30 <= int(sunrise) <= int(time) + 30):
             return "510"  # Sonnenaufgang
-        elif (int(time) - 15 <= int(sunset) <= int(time) + 15):
+        elif (int(time) - 30 <= int(sunset) <= int(time) + 30):
             return "511"  # Sonnenuntergang
-        elif (int(time) >= int(sunset) or int(time) <= int(sunrise)) and not int(sunrise) <= int(time) <= int(sunset):
+        elif (int(time) + 30 >= int(moonset) or int(time) - 30 <= int(moonrise)) and not int(sunrise) <= int(time) <= int(sunset):
             return "512"  # klare mondlose Nacht
         elif int(windspeed) >= 20 and int(sunrise) <= int(time) <= int(sunset):
             return "503" if int(windspeed) < 30 else "502"  # windig oder stürmisch
@@ -46,16 +46,19 @@ def customWeatherCodes(code, time, sunrise, sunset, temp, windspeed):
         elif int(temp) <= 3 and int(sunrise) <= int(time) <= int(sunset):
             return "501"  # kalt
     elif code == "116":
-        if int(windspeed) >= 20:
-            return "504" if int(windspeed) < 30 else "502"  # windig oder stürmisch
-        elif (int(time) - 15 <= int(sunrise) <= int(time) + 15):
+        if (int(time) - 15 <= int(sunrise) <= int(time) + 15):
             return "510"  # Sonnenaufgang
         elif (int(time) - 15 <= int(sunset) <= int(time) + 15):
             return "511"  # Sonnenuntergang
+        elif int(windspeed) >= 20:
+            return "504" if int(windspeed) < 30 else "502"  # windig oder stürmisch
         elif int(temp) >= 28 and int(sunrise) <= int(time) <= int(sunset):
             return "500"  # heiß
         elif int(temp) <= 3 and int(sunrise) <= int(time) <= int(sunset):
             return "501"  # kalt
+    elif code == "119":
+        if int(windspeed) >= 20:
+            return "504" if int(windspeed) < 30 else "502"  # windig oder stürmisch
     return code
 
 @app.get("/weather")
@@ -70,6 +73,8 @@ def get_weather():
                                                 datetime.now().strftime("%H%M"),
                                                 datetime.strptime(data["weather"][0]["astronomy"][0]["sunrise"], "%I:%M %p").strftime("%H%M").lstrip("0"),
                                                 datetime.strptime(data["weather"][0]["astronomy"][0]["sunset"], "%I:%M %p").strftime("%H%M").lstrip("0"),
+                                                datetime.strptime(data["weather"][0]["astronomy"][0]["moonrise"], "%I:%M %p").strftime("%H%M").lstrip("0"),
+                                                datetime.strptime(data["weather"][0]["astronomy"][0]["moonset"], "%I:%M %p").strftime("%H%M").lstrip("0"),
                                                 current["temp_C"],
                                                 current["windspeedKmph"])
     
@@ -105,7 +110,7 @@ def get_weather():
         for hour in day["hourly"]:
             if hour["time"] in ["0", "300"]:
                 continue
-            hour["weatherCode"] = customWeatherCodes(hour["weatherCode"], hour["time"], sunrise, sunset, hour["tempC"], hour["windspeedKmph"])
+            hour["weatherCode"] = customWeatherCodes(hour["weatherCode"], hour["time"], sunrise, sunset, moonrise, moonset, hour["tempC"], hour["windspeedKmph"])
             hourly.append({
                 "time": hour["time"],
                 "temp": hour["tempC"],
@@ -122,7 +127,7 @@ def get_weather():
             score = get_weather_score(hour["code"])
             if code not in scores:
                 scores[code] = 0
-            base = 3 if hour["time"] in ["900", "1200", "1500"] else 1 if hour["time"] == "1800" else 0
+            base = 3 if hour["time"] in ["900", "1200", "1500"] else 1 if hour["time"] == "1800" else 1/3
             scores[code] += base + score*0.5 
         dominant_code = max(scores, key=lambda k: scores[k])
         dominant_desc = next(hour["desc"] for hour in hourly if hour["code"] == dominant_code)
