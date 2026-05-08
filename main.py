@@ -33,11 +33,11 @@ def get_weather_score(code: str) -> int:
 
 def customWeatherCodes(code, time, sunrise, sunset, moonrise, moonset, temp, windspeed):
     if code == "113":
-        if (int(time) - 30 <= int(sunrise) <= int(time) + 30):
+        if (int(time) - 70 <= int(sunrise) <= int(time) + 70):
             return "510"  # Sonnenaufgang
-        elif (int(time) - 30 <= int(sunset) <= int(time) + 30):
+        elif (int(time) - 70 <= int(sunset) <= int(time) + 70):
             return "511"  # Sonnenuntergang
-        elif (int(time) + 30 >= int(moonset) or int(time) - 30 <= int(moonrise)) and not int(sunrise) <= int(time) <= int(sunset):
+        elif (int(time) + 70 >= int(moonset) or int(time) - 70 <= int(moonrise)) and not int(sunrise) <= int(time) <= int(sunset):
             return "512"  # klare mondlose Nacht
         elif int(windspeed) >= 20 and int(sunrise) <= int(time) <= int(sunset):
             return "503" if int(windspeed) < 30 else "502"  # windig oder stürmisch
@@ -46,9 +46,9 @@ def customWeatherCodes(code, time, sunrise, sunset, moonrise, moonset, temp, win
         elif int(temp) <= 3 and int(sunrise) <= int(time) <= int(sunset):
             return "501"  # kalt
     elif code == "116":
-        if (int(time) - 15 <= int(sunrise) <= int(time) + 15):
+        if (int(time) - 70 <= int(sunrise) <= int(time) + 70):
             return "510"  # Sonnenaufgang
-        elif (int(time) - 15 <= int(sunset) <= int(time) + 15):
+        elif (int(time) - 70 <= int(sunset) <= int(time) + 70):
             return "511"  # Sonnenuntergang
         elif int(windspeed) >= 20:
             return "504" if int(windspeed) < 30 else "502"  # windig oder stürmisch
