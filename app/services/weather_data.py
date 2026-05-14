@@ -112,7 +112,7 @@ def get_weather():
             hourly.append({
                 "time": hour["time"],
                 "temp": hour["tempC"],
-                "desc": hour["lang_de"][0]["value"],
+                "desc": hour["lang_xx"][0]["value"],
                 "code": hour["weatherCode"],
                 "wind": hour["windspeedKmph"]
             })
@@ -152,7 +152,7 @@ def get_weather():
     return {
         "current": {
             "temp": current["temp_C"],
-            "desc": current["lang_de"][0]["value"],
+            "desc": current["lang_xx"][0]["value"],
             "code": current["weatherCode"]
         },
         "forecast": forecast
