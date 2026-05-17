@@ -99,6 +99,10 @@ def get_weather():
         sunset = datetime.strptime(day["astronomy"][0]["sunset"], "%I:%M %p").strftime("%H%M").lstrip("0")
         moonrise = datetime.strptime(day["astronomy"][0]["moonrise"], "%I:%M %p").strftime("%H%M").lstrip("0")
         moonset = datetime.strptime(day["astronomy"][0]["moonset"], "%I:%M %p").strftime("%H%M").lstrip("0")
+        if moonrise == "No moonrise":
+            moonrise = "24:00 AM"
+        if moonset == "No moonset":
+            moonset = "00:00 AM"
 
         hourly = []
 
