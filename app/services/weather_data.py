@@ -71,14 +71,22 @@ def get_weather():
     data = response.json()
 
     current = data["current_condition"][0]
+    curr_sunrise = data["weather"][0]["astronomy"][0]["sunrise"]
+    curr_sunset = data["weather"][0]["astronomy"][0]["sunset"]
+    curr_moonrise = data["weather"][0]["astronomy"][0]["moonrise"]
+    curr_moonset = data["weather"][0]["astronomy"][0]["moonset"]
+    if curr_moonrise == "No moonrise":
+        curr_moonrise = "24:00 AM"
+    if curr_moonset == "No moonset":
+        curr_moonset = "00:00 AM"
 
     current["weatherCode"] = custom_weather_codes(
         current["weatherCode"],
         datetime.now().strftime("%H%M"),
-        datetime.strptime(data["weather"][0]["astronomy"][0]["sunrise"], "%I:%M %p").strftime("%H%M").lstrip("0"),
-        datetime.strptime(data["weather"][0]["astronomy"][0]["sunset"], "%I:%M %p").strftime("%H%M").lstrip("0"),
-        datetime.strptime(data["weather"][0]["astronomy"][0]["moonrise"], "%I:%M %p").strftime("%H%M").lstrip("0"),
-        datetime.strptime(data["weather"][0]["astronomy"][0]["moonset"], "%I:%M %p").strftime("%H%M").lstrip("0"),
+        datetime.strptime(curr_sunrise, "%I:%M %p").strftime("%H%M").lstrip("0"),
+        datetime.strptime(curr_sunset, "%I:%M %p").strftime("%H%M").lstrip("0"),
+        datetime.strptime(curr_moonrise, "%I:%M %p").strftime("%H%M").lstrip("0"),
+        datetime.strptime(curr_moonset, "%I:%M %p").strftime("%H%M").lstrip("0"),
         current["temp_C"],
         current["windspeedKmph"]
     )
