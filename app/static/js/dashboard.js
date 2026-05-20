@@ -151,15 +151,7 @@ async function loadWeather() {
     document.getElementById("current").innerHTML = `
         <div class="flex w-full items-center gap-6 mb-6">
 
-            <i class="wi ${getWeatherIcon(
-                data.current.code,
-                (() => {
-                    const n = new Date();
-                    return `${n.getHours()}${n.getMinutes().toString().padStart(2,"0")}`;
-                })(),
-                data.forecast[0].sunrise,
-                data.forecast[0].sunset
-            )} text-8xl ${getIconColor(data.current.code)}"></i>
+            <i class="wi ${data.current.text} text-8xl"></i>
 
             <div class="text-6xl">${data.current.temp}°C</div>
         </div>
@@ -181,15 +173,10 @@ async function loadWeather() {
             hourlyHtml += `
                 <div class="flex gap-8 bg-slate-700 p-4 rounded-lg w-full items-center shadow">
                     <div class="font-bold text-2xl w-1/6 text-right">
-                        ${hour.time.slice(0,-2)}:00
+                        ${hour.time.padStart(3,"0").slice(0,-2)}:00
                     </div>
 
-                    <i class="wi ${getWeatherIcon(
-                        hour.code,
-                        hour.time,
-                        day.sunrise,
-                        day.sunset
-                    )} text-4xl ${getIconColor(hour.code)} w-1/6"></i>
+                    <i class="wi ${hour.text} text-4xl w-1/6"></i>
 
                     <div class="text-2xl opacity-80 w-3/6">
                         ${hour.desc}
@@ -209,8 +196,7 @@ async function loadWeather() {
                     ${formatDate(day.date)}
                 </div>
 
-                <i class="wi ${getWeatherIcon(day.code)}
-                      h-32 text-8xl row-span-2 ${getIconColor(day.code)}"></i>
+                <i class="wi ${day.text} h-32 text-8xl text-center row-span-2 "></i>
 
                 <div class="text-2xl h-16 opacity-80">
                     ${day.desc}
