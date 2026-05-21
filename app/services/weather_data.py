@@ -294,7 +294,8 @@ def get_weather():
             #print(f"{hourData.time:>4}: {text:<35} | {hourData.code}")
 
             if hour["time"] in ["0", "300"]:
-                continue
+                if not (int(datetime.now().strftime("%H%M")) >= 2230 or int(datetime.now().strftime("%H%M")) <= 430):
+                    continue
             hourly.append({
                 "time": hour["time"],
                 "temp": hour["tempC"],
