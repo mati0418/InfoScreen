@@ -97,6 +97,10 @@ def custom_weather_codes(old_code, time, sunrise, sunset, moonrise, moonset, tem
         code["special"] = "sunrise"
     elif time - 70 <= sunset <= time + 30:
         code["special"] = "sunset"
+    elif time - 70 <= moonrise <= time + 30:
+        code["special"] = "moonrise"
+    elif time -70 <= moonset <= time + 30:
+        code["special"] = "moonset"
     elif time > moonset and time < moonrise and code["time"] == "night-alt":
             code["special"] = "stars"
     else:
