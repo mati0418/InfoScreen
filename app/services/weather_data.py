@@ -261,7 +261,7 @@ def get_weather():
                                  day["maxtempC"], day["mintempC"])
 
         hourly = []
-        print(f"\n{day['date']}:")
+        print(f"\033[33m{day['date']}:\033[0m")
         for hour in day["hourly"]:
 
             hourData = WeatherDataHour(hour["time"],
@@ -325,37 +325,60 @@ def get_weather():
         dominant_code = max(scores, key=lambda k: scores[k])
         dominant_desc = next(h["desc"] for h in hourly if h["code"] == dominant_code)
 
-        dominant_text_set = set()
+        dominant_data = WeatherDataHour(
+            0,
+            dominant_code,
+            dominant_desc,
+            0.0,
+            0.0,
+            0.0
+        )
+        count = 0
+
         for hour in dayData.hourly:
             if hour.code["old_code"] == dominant_code:
-                if hour.code["time"] != "day":
+                if int(hour.time) < 600:
                     continue
-                text = assign_icon(hour.code) + " " + assign_colors(hour.code)
-                dominant_text_set.add(text)
-        
-        if len(dominant_text_set) > 1:
-            dominant_text_set = {text for text in dominant_text_set if "sunset" not in text and "sunrise" not in text}
-        dominant_text = f"{dominant_text_set}"
-        if len(dominant_text_set) == 1:
-            dominant_text = next(iter(dominant_text_set))
-        
-        print(f"{day["date"]} Dominant code: {dominant_code} ({dominant_desc}) | Icon: {dominant_text} | {scores}")
+                count += 1
+                dominant_data.time += int(hour.time)
+                dominant_data.temp += int(hour.temp)
+                dominant_data.windspeed += int(hour.windspeed)
+                dominant_data.cloudcover += int(hour.cloudcover)
 
-        if len(dominant_text_set) != 1:
-            dominant_text = "wi-cloud text-white"
+        dominant_data.time = dominant_data.time // count
+        dominant_data.time = dominant_data.time - 20 if dominant_data.time % 100 == 50 else dominant_data.time
+        dominant_data.temp = round(dominant_data.temp / count)
+        dominant_data.windspeed = round(dominant_data.windspeed / count)
+        dominant_data.cloudcover = round(dominant_data.cloudcover / count)
+
+        print(f"Dominant WeatherData: {dominant_data.to_dict()}")
+
+        dominant_code = custom_weather_codes(
+            dominant_code,
+            dominant_data.time,
+            sunrise, sunset,
+            moonrise, moonset,
+            dominant_data.temp,
+            dominant_data.windspeed,
+            dominant_data.cloudcover
+        )
+        dominant_text = assign_icon(dominant_code) + " " + assign_colors(dominant_code)
+
+        print(f"\033[1mDominant code\033[0m: {dominant_code["old_code"]}: \033[32m{dominant_desc}\033[0m | Icon: \033[34m{dominant_text}\033[0m | {scores}")
 
         forecast.append({
             "date": day["date"],
             "max": day["maxtempC"],
             "min": day["mintempC"],
             "desc": dominant_desc,
-            "code": dominant_code,
+            "code": dominant_code["old_code"],
             "text": dominant_text,
             "hourly": hourly,
             "sunrise": sunrise,
             "sunset": sunset
         })
 
+    print()
     return {
         "current": {
             "temp": current["temp_C"],
