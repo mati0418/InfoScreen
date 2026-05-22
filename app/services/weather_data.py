@@ -262,7 +262,7 @@ def get_weather():
                                  sunrise, sunset,
                                  moonrise, moonset,
                                  day["astronomy"][0]["moon_phase"],
-                                 day["maxtempC"], day["mintempC"])
+                                 day["maxtempC"], day["mintempC"],[])
 
         hourly = []
         print(f"\033[33m{day['date']}:\033[0m")
