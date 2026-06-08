@@ -81,7 +81,7 @@ async function loadWeather() {
         });
 
         forecastHtml += `
-            <div class="forecast-card bg-slate-800 grid grid-cols-2 p-6 rounded-2xl lg:w-1/3 content-start shadow-lg hover:ring hover:ring-4 ring-slate-600"
+            <div class="forecast-card bg-slate-800 grid grid-cols-2 p-6 rounded-2xl xl:w-1/3 content-start shadow-lg hover:ring hover:ring-4 ring-slate-600"
                 data-index="${index}"
             >
 
