@@ -8,13 +8,13 @@
     <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- Weather Icons -->
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/weather-icons/2.0.12/css/weather-icons.min.css">
+    <link rel="stylesheet" href="/static/css/weather-icons.min.css">
+    <link rel="stylesheet" href="/static/css/weather-icons-wind.min.css">
 </head>
 
-<body class="bg-slate-900 text-white font-sans h-screen overflow-hidden">
+<body class="bg-slate-900 text-white font-sans h-screen lg:overflow-hidden">
 
-<div class="p-16 grid grid-cols-3 gap-8 w-full">
+<div class="p-16 grid grid-cols-1 lg:rid-cols-3 gap-8 w-full">
 
     <!-- CURRENT -->
     <div class="text-7xl pb-4 self-center text-end opacity-70">Aktuelles Wetter:</div>
@@ -25,12 +25,16 @@
          class="text-6xl opacity-70 mt-2 self-center text-end"></div>
 
     <!-- FORECAST -->
-    <div id="forecast" class="flex gap-6 mt-10 col-span-full"></div>
+    <div id="forecast" class="flex flex-col lg:flex-row gap-6 mt-10 col-span-full"></div>
+
+    <div id="modal" class="fixed hidden flex inset-0 items-center justify-center bg-black/50 z-50">
+        <div id="modal-Content"></div>
+    </div>
 
 </div>
 
 <!-- JS auslagern -->
-<script src="/static/js/dashboard.js?v=3"></script>
+<script src="/static/js/dashboard.js?v=9"></script>
 
 </body>
 </html>

@@ -16,6 +16,43 @@ PARTLY_CLOUDY = ["116"]
 VERY_CLOUDY = ["119"]
 CLOUDY = ["122"]
 
+def get_Moonphase(illumination, moon_phase):
+    moon_illumination = int(illumination)
+    
+    waxing = "waxing" if "Waxing" in moon_phase else "waning"
+    text = "wi-moon-"
+    
+    if moon_illumination <= 1:
+        text += "new"
+    elif moon_illumination <= 8:
+        text += f"{waxing}-crescent-1"
+    elif moon_illumination <= 15:
+        text += f"{waxing}-crescent-2"
+    elif moon_illumination <= 22:
+        text += f"{waxing}-crescent-3"
+    elif moon_illumination <= 29:
+        text += f"{waxing}-crescent-4"
+    elif moon_illumination <= 36:
+        text += f"{waxing}-crescent-5"
+    elif moon_illumination <= 44:
+        text += f"{waxing}-crescent-6"
+    elif moon_illumination <= 55:
+        text += "first-quarter"
+    elif moon_illumination <= 62:
+        text += f"{waxing}-gibbous-1"
+    elif moon_illumination <= 69:
+        text += f"{waxing}-gibbous-2"
+    elif moon_illumination <= 76:
+        text += f"{waxing}-gibbous-3"
+    elif moon_illumination <= 83:
+        text += f"{waxing}-gibbous-4"
+    elif moon_illumination <= 90:
+        text += f"{waxing}-gibbous-5"
+    elif moon_illumination <= 97:
+        text += f"{waxing}-gibbous-6"
+    else:
+        text += "full"
+    return text
 
 def get_weather_score(code: str) -> int:
 
@@ -85,9 +122,9 @@ def custom_weather_codes(old_code, time, sunrise, sunset, moonrise, moonset, tem
     else:
         code["clouds"] = "overcast"
     
-    if windspeed >= 20:
+    if windspeed >= 12:
         code["special"] = "windy"
-    elif windspeed >= 30:
+    elif windspeed >= 29:
         code["special"] = "strong-wind"
     elif temp >= 28:
         code["special"] = "hot"
@@ -258,6 +295,8 @@ def get_weather():
         else:
             moonset = datetime.strptime(moonset, "%I:%M %p").strftime("%H%M").lstrip("0")
 
+        moonphase = get_Moonphase(day["astronomy"][0]["moon_illumination"],day["astronomy"][0]["moon_phase"])
+
         dayData = WeatherDataDay(day["date"],
                                  sunrise, sunset,
                                  moonrise, moonset,
@@ -305,8 +344,13 @@ def get_weather():
                 "temp": hour["tempC"],
                 "desc": hour["lang_xx"][0]["value"],
                 "code": hour["weatherCode"],
-                "wind": hour["windspeedKmph"],
+                "windspeed": hour["windspeedKmph"],
                 "text": text,
+                "rainChance": hour["chanceofrain"],
+                "precipMM": hour["precipMM"],
+                "uvIndex": hour["uvIndex"],
+                "visibility": hour["visibility"],
+                "windDir": hour["winddir16Point"]
             })
 
         # dominance calculation
@@ -367,6 +411,7 @@ def get_weather():
             dominant_data.windspeed,
             dominant_data.cloudcover
         )
+        print(dominant_code)
         dominant_text = assign_icon(dominant_code) + " " + assign_colors(dominant_code)
 
         print(f"\033[1mDominant code\033[0m: {dominant_code["old_code"]}: \033[32m{dominant_desc}\033[0m | Icon: \033[34m{dominant_text}\033[0m | {scores}")
@@ -380,7 +425,10 @@ def get_weather():
             "text": dominant_text,
             "hourly": hourly,
             "sunrise": sunrise,
-            "sunset": sunset
+            "sunset": sunset,
+            "moonrise": moonrise,
+            "moonset": moonset,
+            "moonphase": moonphase,
         })
 
     print()
