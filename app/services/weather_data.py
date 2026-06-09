@@ -19,37 +19,37 @@ CLOUDY = ["122"]
 def get_Moonphase(illumination, moon_phase):
     moon_illumination = int(illumination)
     
-    waxing = "waxing" if "Waxing" in moon_phase else "waning"
+    waxing = True if "Waxing" in moon_phase else False
     text = "wi-moon-"
     
     if moon_illumination <= 1:
         text += "new"
     elif moon_illumination <= 8:
-        text += f"{waxing}-crescent-1"
+        text += "waxing-crescent-1" if waxing else "waning-crescent-6"
     elif moon_illumination <= 15:
-        text += f"{waxing}-crescent-2"
+        text += "waxing-crescent-2" if waxing else "waning-crescent-5"
     elif moon_illumination <= 22:
-        text += f"{waxing}-crescent-3"
+        text += "waxing-crescent-3" if waxing else "waning-crescent-4"
     elif moon_illumination <= 29:
-        text += f"{waxing}-crescent-4"
+        text += "waxing-crescent-4" if waxing else "waning-crescent-3"
     elif moon_illumination <= 36:
-        text += f"{waxing}-crescent-5"
+        text += "waxing-crescent-5" if waxing else "waning-crescent-2"
     elif moon_illumination <= 44:
-        text += f"{waxing}-crescent-6"
+        text += "waxing-crescent-6" if waxing else "waning-crescent-1"
     elif moon_illumination <= 55:
-        text += "first-quarter"
+        text += "first-quarter" if waxing else "third-quarter"
     elif moon_illumination <= 62:
-        text += f"{waxing}-gibbous-1"
+        text += "waxing-gibbous-1" if waxing else "waning-gibbous-6"
     elif moon_illumination <= 69:
-        text += f"{waxing}-gibbous-2"
+        text += "waxing-gibbous-2" if waxing else "waning-gibbous-5"
     elif moon_illumination <= 76:
-        text += f"{waxing}-gibbous-3"
+        text += "waxing-gibbous-3" if waxing else "waning-gibbous-4"
     elif moon_illumination <= 83:
-        text += f"{waxing}-gibbous-4"
+        text += "waxing-gibbous-4" if waxing else "waning-gibbous-3"
     elif moon_illumination <= 90:
-        text += f"{waxing}-gibbous-5"
+        text += "waxing-gibbous-5" if waxing else "waning-gibbous-2"
     elif moon_illumination <= 97:
-        text += f"{waxing}-gibbous-6"
+        text += "waxing-gibbous-6" if waxing else "waning-gibbous-1"
     else:
         text += "full"
     return text
