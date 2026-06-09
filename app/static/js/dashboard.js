@@ -108,6 +108,7 @@ async function loadWeather() {
 
     document.getElementById("forecast").innerHTML = forecastHtml;
 
+    // FORECAST MODAL
     document.querySelectorAll(".forecast-card").forEach(card => {
 
         card.addEventListener("click", () => {
@@ -118,7 +119,8 @@ async function loadWeather() {
             let hourlyHtml = "";
             day.hourly.forEach(hour => {
                 hourlyHtml += `
-                    <div class="flex gap-8 bg-slate-700 p-4 rounded-lg w-full items-center shadow">
+                    <div class="grid grid-cols-10 gap-8 bg-slate-700 p-4 rounded-lg w-full items-center shadow">
+
                         <div class="font-bold text-2xl w-1/16 text-right">
                             ${formatTime(hour.time)}
                         </div>
@@ -130,7 +132,7 @@ async function loadWeather() {
                         </div>
 
                         <div class="text-2xl text-center w-1/16">
-                            ${hour.temp}°
+                            ${hour.temp}°C
                         </div>
 
                         <div class="text-2xl text-center w-2/16">
@@ -149,11 +151,12 @@ async function loadWeather() {
                             ${hour.visibility} km Sicht
                         </div>
 
-                        <i class="wi wi-wind wi-from-${hour.windDir.toLowerCase()} text-4xl size-fit"></i>
-
-                        <div class="text-2xl text-center w-1/16">
-                            ${hour.windspeed} km/h
+                        <div class="text-end">
+                            <i class="wi wi-wind wi-from-${hour.windDir.toLowerCase()} text-6xl size-fit"></i>
                         </div>
+
+                        <i class="wi ${hour.windspeedtext} text-6xl w-1/16"></i>
+                        
 
                     </div>
                 `;

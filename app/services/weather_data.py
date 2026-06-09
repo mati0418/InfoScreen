@@ -238,6 +238,16 @@ def assign_icons(dayData: WeatherDataDay):
     for hour in dayData.hourly:
         text = assign_icon(hour.code)
 
+BEAUFORT_LIMITS = [
+    1, 5, 11, 19, 28, 38, 49, 61, 74, 88, 102, 117
+]
+
+def wind_to_beaufort(speed):
+    speed = int(speed)
+    for i, limit in enumerate(BEAUFORT_LIMITS):
+        if speed <= limit:
+            return i
+    return 12
 
 
 # main weather function
@@ -327,12 +337,22 @@ def get_weather():
             )
             dayData.hourly.append(hourData)
 
-            text = ""
-            text += assign_icon(hourData.code)
+            Weather_text = ""
+            Weather_text += assign_icon(hourData.code)
             color = ""
             color += assign_colors(hourData.code)
-            if color and text:
-                text += " " + color
+            if color and Weather_text:
+                Weather_text += " " + color
+
+            wind_text = f"wi-wind-beaufort-{wind_to_beaufort(hour['windspeedKmph'])}"
+            if wind_to_beaufort(hour['windspeedKmph']) <= 3:
+                wind_text += " text-sky-200"
+            elif wind_to_beaufort(hour['windspeedKmph']) <= 6:
+                wind_text += " text-sky-400"
+            elif wind_to_beaufort(hour['windspeedKmph']) <= 9:
+                wind_text += " text-orange-200"
+            else:
+                wind_text += " text-orange-400"
 
             #print(f"{hourData.time:>4}: {text:<35} | {hourData.code}")
 
@@ -345,7 +365,8 @@ def get_weather():
                 "desc": hour["lang_xx"][0]["value"],
                 "code": hour["weatherCode"],
                 "windspeed": hour["windspeedKmph"],
-                "text": text,
+                "windspeedtext": wind_text,
+                "text": Weather_text,
                 "rainChance": hour["chanceofrain"],
                 "precipMM": hour["precipMM"],
                 "uvIndex": hour["uvIndex"],
