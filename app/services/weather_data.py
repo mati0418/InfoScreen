@@ -366,6 +366,18 @@ def get_weather():
             else:
                 uvColor = "text-purple-400"
 
+            rainChance = ""
+            if int(hour['chanceofrain']) < int(hour['chanceofsnow']):
+                rainChance += f"{hour['chanceosnow']}% Schnee"
+            else:
+                rainChance += f"{hour['chanceofrain']}% Regen"
+
+            precipMM = float(hour['precipMM'])
+            if precipMM > 10:
+                precipMM_text = f"{precipMM/10:.1f} cm"
+            else:
+                precipMM_text = f"{precipMM:.1f} mm"
+
             #print(f"{hourData.time:>4}: {text:<35} | {hourData.code}")
 
             if hour["time"] in ["0", "300"]:
@@ -379,8 +391,8 @@ def get_weather():
                 "windspeed": hour["windspeedKmph"],
                 "windspeedtext": wind_text,
                 "text": Weather_text,
-                "rainChance": hour["chanceofrain"],
-                "precipMM": hour["precipMM"],
+                "rainChance": rainChance,
+                "precipMM": precipMM_text,
                 "uvIndex": hour["uvIndex"],
                 "uvColor": uvColor,
                 "visibility": hour["visibility"],

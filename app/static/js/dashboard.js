@@ -140,11 +140,11 @@ async function loadWeather() {
                         </div>
 
                         <div class="text-2xl text-center w-2/16">
-                            ${hour.rainChance}% Regen
+                            ${hour.rainChance}
                         </div>
 
                         <div class="text-2xl text-center w-2/16">
-                            ${hour.precipMM} mm
+                            ${hour.precipMM}
                         </div>
 
                         <div class="text-2xl text-center w-2/16">
