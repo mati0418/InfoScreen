@@ -354,6 +354,18 @@ def get_weather():
             else:
                 wind_text += " text-orange-400"
 
+            uvColor = ""
+            if int(hour["uvIndex"]) <= 2:
+                uvColor = "text-yellow-200"
+            elif int(hour["uvIndex"]) <= 5:
+                uvColor = "text-yellow-400"
+            elif int(hour["uvIndex"]) <= 7:
+                uvColor = "text-orange-400"
+            elif int(hour["uvIndex"]) <= 10:
+                uvColor = "text-red-400"
+            else:
+                uvColor = "text-purple-400"
+
             #print(f"{hourData.time:>4}: {text:<35} | {hourData.code}")
 
             if hour["time"] in ["0", "300"]:
@@ -370,6 +382,7 @@ def get_weather():
                 "rainChance": hour["chanceofrain"],
                 "precipMM": hour["precipMM"],
                 "uvIndex": hour["uvIndex"],
+                "uvColor": uvColor,
                 "visibility": hour["visibility"],
                 "windDir": hour["winddir16Point"]
             })

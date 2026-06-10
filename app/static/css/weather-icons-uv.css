@@ -1,0 +1,21 @@
+.wi-uv {
+    position: relative;
+    display: inline-block;
+    line-height: 1;
+}
+
+/* UV Zahl */
+.wi-uv::after {
+    content: attr(data-uv);
+
+    position: absolute;
+    right: -0.40em;
+    bottom: -0.20em;
+
+    font-size: 0.45em;
+    font-weight: 700;
+    color: currentColor;
+
+    font-family: Arial, Helvetica, sans-serif;
+    pointer-events: none;
+}

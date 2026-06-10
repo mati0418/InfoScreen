@@ -136,7 +136,7 @@ async function loadWeather() {
                         </div>
 
                         <div class="text-2xl text-center w-2/16">
-                            UV-Index: ${hour.uvIndex}
+                            <i class="wi wi-day-sunny wi-uv text-6xl ${hour.uvColor}" data-uv="${hour.uvIndex}"></i>
                         </div>
 
                         <div class="text-2xl text-center w-2/16">
