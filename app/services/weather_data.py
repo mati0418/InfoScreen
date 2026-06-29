@@ -122,10 +122,10 @@ def custom_weather_codes(old_code, time, sunrise, sunset, moonrise, moonset, tem
     else:
         code["clouds"] = "overcast"
     
-    if windspeed >= 12:
-        code["special"] = "windy"
-    elif windspeed >= 29:
+    if wind_to_beaufort(windspeed) >= 6:
         code["special"] = "strong-wind"
+    elif wind_to_beaufort(windspeed) >= 4:
+        code["special"] = "windy"
     elif temp >= 28:
         code["special"] = "hot"
     elif temp <= 4:
@@ -462,6 +462,33 @@ def get_weather():
 
         print(f"\033[1mDominant code\033[0m: {dominant_code["old_code"]}: \033[32m{dominant_desc}\033[0m | Icon: \033[34m{dominant_text}\033[0m | {scores}")
 
+        # Sort moontimes
+        if day["astronomy"][0]["moonrise"] == "No moonrise":
+            moontime_1 = "No moonrise"
+            moontime_2 = moonset
+            moontime_1_icon = "wi-moonrise"
+            moontime_2_icon = "wi-moonset"
+        elif day["astronomy"][0]["moonset"] == "No moonset":
+            moontime_1 = moonrise
+            moontime_2 = "No moonset"
+            moontime_1_icon = "wi-moonrise"
+            moontime_2_icon = "wi-moonset"
+        elif day["astronomy"][0]["moonrise"] == "No moonrise" and day["astronomy"][0]["moonset"] == "No moonset":
+            moontime_1 = "No moonrise"
+            moontime_2 = "No moonset"
+            moontime_1_icon = "wi-moonrise"
+            moontime_2_icon = "wi-moonset"
+        elif int(moonrise) < int(moonset):
+            moontime_1 = moonrise
+            moontime_2 = moonset
+            moontime_1_icon = "wi-moonrise"
+            moontime_2_icon = "wi-moonset"
+        else:
+            moontime_1 = moonset
+            moontime_2 = moonrise
+            moontime_1_icon = "wi-moonset"
+            moontime_2_icon = "wi-moonrise"
+
         forecast.append({
             "date": day["date"],
             "max": day["maxtempC"],
@@ -472,8 +499,8 @@ def get_weather():
             "hourly": hourly,
             "sunrise": sunrise,
             "sunset": sunset,
-            "moonrise": moonrise,
-            "moonset": moonset,
+            "moontime_1": {"time": moontime_1, "icon": moontime_1_icon},
+            "moontime_2": {"time": moontime_2, "icon": moontime_2_icon},
             "moonphase": moonphase,
         })
 

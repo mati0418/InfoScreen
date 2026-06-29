@@ -185,9 +185,9 @@ async function loadWeather() {
                 </div>
 
                 <div class="grid grid-cols-2 justify-evenly w-40">
-                    <i class="wi wi-moonrise text-yellow-400 place-content-center text-3xl text-right h-16"></i>
+                    <i class="wi ${day.moontime_1.icon} text-yellow-400 place-content-center text-3xl text-right h-16"></i>
                     <div class="text-2xl h-16 text-right place-content-center">
-                        ${formatTime(day.moonrise)}
+                        ${formatTime(day.moontime_1.time)}
                     </div>
                 </div>
 
@@ -207,9 +207,9 @@ async function loadWeather() {
                 </div>
 
                 <div class="grid grid-cols-2 justify-evenly w-40">
-                    <i class="wi wi-moonset text-yellow-400 text-3xl place-content-center text-right h-16"></i>
+                    <i class="wi ${day.moontime_2.icon} text-yellow-400 text-3xl place-content-center text-right h-16"></i>
                     <div class="text-2xl h-16 text-right content-center">
-                        ${formatTime(day.moonset)}
+                        ${formatTime(day.moontime_2.time)}
                     </div>
                 </div>
 
