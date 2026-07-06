@@ -464,18 +464,18 @@ def get_weather():
 
         # Sort moontimes
         if day["astronomy"][0]["moonrise"] == "No moonrise":
-            moontime_1 = "No moonrise"
+            moontime_1 = "----"
             moontime_2 = moonset
             moontime_1_icon = "wi-moonrise"
             moontime_2_icon = "wi-moonset"
         elif day["astronomy"][0]["moonset"] == "No moonset":
             moontime_1 = moonrise
-            moontime_2 = "No moonset"
+            moontime_2 = "----"
             moontime_1_icon = "wi-moonrise"
             moontime_2_icon = "wi-moonset"
         elif day["astronomy"][0]["moonrise"] == "No moonrise" and day["astronomy"][0]["moonset"] == "No moonset":
-            moontime_1 = "No moonrise"
-            moontime_2 = "No moonset"
+            moontime_1 = "----"
+            moontime_2 = "----"
             moontime_1_icon = "wi-moonrise"
             moontime_2_icon = "wi-moonset"
         elif int(moonrise) < int(moonset):
