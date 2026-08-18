@@ -3,6 +3,6 @@ from app.services.weather_data import get_weather
 
 router = APIRouter()
 
-@router.get("/weather")
-def weather():
-    return get_weather()
+@router.get("/weatherdata/{city}")
+def weather(city: str):
+    return get_weather(city)

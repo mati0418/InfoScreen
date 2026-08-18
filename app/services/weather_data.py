@@ -251,9 +251,10 @@ def wind_to_beaufort(speed):
 
 
 # main weather function
-def get_weather():
+def get_weather(city:str):
+    request_url = f"https://wttr.in/{city}?format=j1&lang=de"
     response = requests.get(
-        "https://wttr.in/Ilmenau?format=j1&lang=de",
+        request_url,
         timeout=5
     )
     data = response.json()
@@ -368,7 +369,7 @@ def get_weather():
 
             rainChance = ""
             if int(hour['chanceofrain']) < int(hour['chanceofsnow']):
-                rainChance += f"{hour['chanceosnow']}% Schnee"
+                rainChance += f"{hour['chanceofnow']}% Schnee"
             else:
                 rainChance += f"{hour['chanceofrain']}% Regen"
 

@@ -13,12 +13,12 @@
     <link rel="stylesheet" href="/static/css/weather-icons-uv.css">
 </head>
 
-<body class="bg-slate-900 text-white font-sans h-screen xl:overflow-hidden">
+<body data-city="{{ city }}" class="bg-slate-900 text-white font-sans h-screen xl:overflow-hidden">
 
 <div class="p-16 grid grid-cols-2 xl:grid-cols-3 gap-8 w-full">
 
     <!-- CURRENT -->
-    <div class="text-7xl pb-4 self-center text-center xl:text-end opacity-70 col-span-full xl:col-span-1">Aktuelles Wetter:</div>
+    <div class="text-7xl pb-4 self-center text-center xl:text-end opacity-70 col-span-full xl:col-span-1">Wetter für {{ city }}:</div>
 
     <div id="current"></div>
 
@@ -35,7 +35,7 @@
 </div>
 
 <!-- JS auslagern -->
-<script src="/static/js/dashboard.js?v=10"></script>
+<script src="/static/js/dashboard.js?v=11"></script>
 
 </body>
 </html>

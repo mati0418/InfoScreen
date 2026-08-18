@@ -35,7 +35,8 @@ function updateTime() {
 // -------------------- WEATHER LOAD --------------------
 
 async function loadWeather() {
-    const res = await fetch("/weather");
+    const city = document.body.dataset.city;
+    const res = await fetch(`/weatherdata/${city}`);
     const data = await res.json();
 
     // CURRENT
