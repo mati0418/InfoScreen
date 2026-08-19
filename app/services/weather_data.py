@@ -199,7 +199,7 @@ def assign_icon(code):
             if code["time"] == "day":
                 text += "sunny-overcast"
             else:
-                text += "night-alt-partly-cloudy"
+                text += "partly-cloudy"
 
     return text
 
